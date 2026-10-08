@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import Station4 from './workstation4'
 import './App.css'
 
 function App() {
- <>
- </>
+  return (
+    <>
+      <Station4 />
+    </>
+  )
 }
 
 export default App
