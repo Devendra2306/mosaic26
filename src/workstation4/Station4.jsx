@@ -519,14 +519,10 @@ export default function Station4() {
       setIsAuthorized(true);
       setModuleCAnswers({
         q_mod_c_1: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
-        q_mod_c_2: { selectedKey: "C", isCorrect: true, wrongAttempts: 0 },
+        q_mod_c_2: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
         q_mod_c_3: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
         q_mod_c_4: { selectedKey: "A", isCorrect: true, wrongAttempts: 0 },
         q_mod_c_5: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
-        q_mod_c_6: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
-        q_mod_c_7: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
-        q_mod_c_8: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
-        q_mod_c_9: { selectedKey: "B", isCorrect: true, wrongAttempts: 0 },
       });
       addLog("[DEBUG] TOLERANCES SET TO SAFE SPEC & PASSCODE AUTHORIZED", "info");
     },
