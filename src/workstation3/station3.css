@@ -1,64 +1,74 @@
 @import "tailwindcss";
 
-/* ============================================
-   FAST & FURIOUS THEME — OPERATION REDLINE
-   ============================================ */
+/* ================================================================
+   OPERATION REDLINE — Fast & Furious Cinematic UI System
+   Color spec: FF3038 red / FF6B2C orange / 00C8FF blue / 08090D bg
+   Typography: Orbitron (headings, telemetry) / Inter (body, labels)
+   ================================================================ */
 
 @theme {
-  /* Core Palette — F&F Night Street */
-  --color-bg-base:         #050507;
-  --color-asphalt:         #0d0d0f;
-  --color-carbon:          #111114;
-  --color-carbon-light:    #1a1a20;
-  --color-metal:           #22222a;
+  /* ── Backgrounds ── */
+  --color-bg-base:       #08090D;
+  --color-bg-secondary:  #12151C;
+  --color-bg-panel:      #0E1118;
+  --color-bg-card:       #1A1E28;
 
-  /* Accent Colors */
-  --color-nos-orange:      #ff6a00;   /* Primary: NOS canister orange */
-  --color-nos-amber:       #ffaa00;   /* Secondary: headlight amber */
-  --color-speed-blue:      #00d4ff;   /* Tertiary: police scanner blue */
-  --color-underglow-purple:#9b00ff;   /* Underglow purple */
-  --color-acid-green:      #39ff14;   /* Correct/success */
-  --color-danger-red:      #ff2020;   /* Error/danger */
-  --color-chrome:          #c8d0e0;   /* Chrome silver */
+  /* ── Accents ── */
+  --color-red:           #FF3038;   /* Racing red — primary CTA */
+  --color-orange:        #FF6B2C;   /* Electric orange — secondary accent */
+  --color-blue:          #00C8FF;   /* Neon blue — sparingly */
+  --color-green:         #22C55E;   /* Success green */
+  --color-amber:         #F59E0B;   /* Warning amber */
 
-  /* Aliases kept for legacy compat */
-  --color-neon-cyan:       #00d4ff;
-  --color-neon-magenta:    #ff6a00;
-  --color-amber:           #ffaa00;
-  --color-nitrous-blue:    #0044ff;
+  /* ── Text ── */
+  --color-text-primary:  #F5F5F5;
+  --color-text-secondary:#9298A5;
+  --color-text-muted:    #5A6070;
 
-  /* Typography */
-  --font-heading: 'Bebas Neue', 'Impact', 'Arial Narrow', sans-serif;
+  /* ── Borders ── */
+  --color-border:        rgba(255,255,255,0.10);
+  --color-border-accent: rgba(255,48,56,0.35);
+
+  /* ── Legacy aliases (do not remove — used in JSX) ── */
+  --color-nos-orange:    #FF6B2C;
+  --color-nos-amber:     #F59E0B;
+  --color-speed-blue:    #00C8FF;
+  --color-acid-green:    #22C55E;
+  --color-danger-red:    #FF3038;
+  --color-neon-cyan:     #00C8FF;
+  --color-neon-magenta:  #FF6B2C;
+
+  /* ── Typography ── */
+  --font-heading: 'Orbitron', 'Consolas', monospace;
   --font-hud:     'Orbitron', 'Consolas', monospace;
-  --font-plate:   'Orbitron', 'Consolas', 'Monaco', monospace;
-  --font-body:    'Rajdhani', 'Segoe UI', sans-serif;
+  --font-plate:   'Orbitron', 'Consolas', monospace;
+  --font-body:    'Inter', 'Segoe UI', sans-serif;
 }
 
-/* ============================================
-   BASE STYLES
-   ============================================ */
+/* ================================================================
+   BASE
+   ================================================================ */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
 
   html, body {
     margin: 0; padding: 0;
-    background: var(--color-bg-base);
-    color: #e8eaf0;
-    font-family: var(--font-body);
-    font-weight: 500;
+    background: #08090D;
+    color: #F5F5F5;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
     overflow: hidden;
     height: 100%;
+    -webkit-font-smoothing: antialiased;
   }
 
-  ::selection {
-    background: var(--color-nos-orange);
-    color: #000;
-  }
+  ::selection { background: #FF3038; color: #fff; }
 }
 
-/* ============================================
-   ROOT & LAYOUT
-   ============================================ */
+/* ================================================================
+   ROOT
+   ================================================================ */
 #root {
   flex: 1;
   display: flex;
@@ -69,99 +79,70 @@
   position: relative;
 }
 
-/* ============================================
-   BACKGROUND LAYERS
-   ============================================ */
+/* ================================================================
+   AMBIENT BACKGROUND LAYERS
+   Three layers: deep base, cinematic vignette, subtle road grid
+   ================================================================ */
 .ambient-layer {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   pointer-events: none;
-  z-index: 1;
 }
 
-/* Asphalt road texture */
+/* Cinematic dark gradient base */
 .asphalt-bg {
-  background:
-    radial-gradient(ellipse at 20% 80%, rgba(255,106,0,0.07) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(155,0,255,0.04) 0%, transparent 70%),
-    linear-gradient(180deg, #050507 0%, #07070a 40%, #0a0a0d 100%);
   z-index: 1;
+  background:
+    radial-gradient(ellipse at 15% 85%, rgba(255,48,56,0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 15%, rgba(0,200,255,0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, rgba(18,21,28,0.8) 0%, #08090D 100%);
 }
 
-/* Road lane markings grid */
+/* Subtle road grid — barely visible, cinematic not cyberpunk */
 .road-grid {
+  z-index: 2;
   background-image:
-    /* Dashed center line */
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px, transparent 60px,
-      rgba(255,170,0,0.08) 60px, rgba(255,170,0,0.08) 120px
-    ),
-    /* Vertical lines — lane markers */
-    linear-gradient(rgba(255,106,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,106,0,0.03) 1px, transparent 1px);
-  background-size: 240px 100%, 60px 60px, 60px 60px;
-  z-index: 2;
-  animation: roadScroll 8s linear infinite;
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: gridDrift 20s linear infinite;
+  opacity: 0.6;
 }
-
-@keyframes roadScroll {
-  from { background-position: 0 0, 0 0, 0 0; }
-  to   { background-position: -240px 0, -60px 60px, -60px 60px; }
-}
-
-/* Speed lines (moving streaks on sides) */
-.speed-lines {
-  z-index: 2;
-  overflow: hidden;
-}
-.speed-lines::before,
-.speed-lines::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 120px;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0, transparent 2px,
-    rgba(255,106,0,0.06) 2px, rgba(255,106,0,0.06) 4px
-  );
-  animation: speedStreak 0.4s linear infinite;
-}
-.speed-lines::before { left: 0; }
-.speed-lines::after  { right: 0; transform: scaleX(-1); }
-@keyframes speedStreak {
+@keyframes gridDrift {
   from { background-position: 0 0; }
-  to   { background-position: 40px 0; }
+  to   { background-position: 0 80px; }
 }
 
-/* Bottom underglow */
-.underglow {
-  background: radial-gradient(ellipse at 50% 110%, rgba(155,0,255,0.18) 0%, rgba(255,106,0,0.08) 40%, transparent 70%);
-  z-index: 2;
-}
-
+/* Cinematic vignette frame */
 .vignette {
-  box-shadow: inset 0 0 200px rgba(0,0,0,0.9), inset 0 0 60px rgba(0,0,0,0.5);
   z-index: 3;
+  box-shadow:
+    inset 0 0 140px rgba(0,0,0,0.85),
+    inset 0 0 40px rgba(0,0,0,0.4);
 }
 
-/* ============================================
-   TYPOGRAPHY
-   ============================================ */
-.font-heading { font-family: var(--font-heading) !important; }
-.font-hud     { font-family: var(--font-hud) !important; }
-.font-plate   { font-family: var(--font-plate) !important; }
+/* Bottom atmospheric glow — red tint on floor */
+.underglow {
+  z-index: 2;
+  background: radial-gradient(ellipse at 50% 105%, rgba(255,48,56,0.08) 0%, transparent 60%);
+}
 
-/* ============================================
-   GLITCH TEXT EFFECT
-   ============================================ */
+/* ================================================================
+   TYPOGRAPHY — Orbitron headings, Inter body
+   ================================================================ */
+.font-heading { font-family: 'Orbitron', monospace !important; }
+.font-hud     { font-family: 'Orbitron', monospace !important; }
+.font-plate   { font-family: 'Orbitron', monospace !important; }
+.font-body    { font-family: 'Inter', sans-serif !important; }
+
+/* ================================================================
+   GLITCH TEXT — controlled, not excessive
+   ================================================================ */
 .glitch-text {
   position: relative;
-  font-family: var(--font-heading);
-  letter-spacing: 0.08em;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .glitch-text::before,
@@ -169,189 +150,186 @@
   content: attr(data-text);
   position: absolute;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
+  pointer-events: none;
 }
 .glitch-text::before {
-  color: var(--color-nos-orange);
-  animation: glitch-1 3s infinite linear;
-  clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+  color: #FF3038;
+  animation: glitchA 4s infinite linear;
+  clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%);
 }
 .glitch-text::after {
-  color: var(--color-speed-blue);
-  animation: glitch-2 3s infinite linear;
-  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+  color: #00C8FF;
+  animation: glitchB 4s infinite linear;
+  clip-path: polygon(0 58%, 100% 58%, 100% 74%, 0 74%);
 }
-@keyframes glitch-1 {
-  0%, 90%, 100% { transform: translate(0); opacity: 0; }
-  91% { transform: translate(-3px, 1px); opacity: 0.8; }
-  93% { transform: translate(3px, -1px); opacity: 0.8; }
-  95% { transform: translate(-1px, 2px); opacity: 0; }
+@keyframes glitchA {
+  0%, 88%, 100% { transform: translate(0); opacity: 0; }
+  90%           { transform: translate(-4px, 1px); opacity: 0.75; }
+  92%           { transform: translate(3px, -1px); opacity: 0.75; }
+  94%           { transform: translate(0); opacity: 0; }
 }
-@keyframes glitch-2 {
-  0%, 85%, 100% { transform: translate(0); opacity: 0; }
-  86% { transform: translate(3px, -1px); opacity: 0.7; }
-  88% { transform: translate(-3px, 1px); opacity: 0.7; }
-  90% { transform: translate(0); opacity: 0; }
+@keyframes glitchB {
+  0%, 82%, 100% { transform: translate(0); opacity: 0; }
+  84%           { transform: translate(4px, -1px); opacity: 0.6; }
+  86%           { transform: translate(-2px, 1px); opacity: 0.6; }
+  88%           { transform: translate(0); opacity: 0; }
 }
 
-/* ============================================
-   CLIP PATHS — F&F ANGULAR STYLE
-   ============================================ */
+/* ================================================================
+   CLIP PATHS — angular motorsport geometry
+   ================================================================ */
 .panel-clip {
-  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-}
-.btn-clip {
-  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
 }
 .panel-clip-sm {
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
+.btn-clip {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
 
-/* ============================================
-   PANEL COMPONENT
-   ============================================ */
+/* ================================================================
+   PANEL — cinematic card base
+   ================================================================ */
 .ff-panel {
-  background: linear-gradient(135deg, rgba(17,17,20,0.95) 0%, rgba(13,13,16,0.98) 100%);
-  border: 1px solid rgba(255,106,0,0.2);
+  background: #0E1118;
+  border: 1px solid rgba(255,255,255,0.10);
   position: relative;
   overflow: hidden;
 }
+
+/* Top-left red accent bar */
 .ff-panel::before {
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 60px; height: 2px;
-  background: linear-gradient(90deg, var(--color-nos-orange), transparent);
-  box-shadow: 0 0 10px var(--color-nos-orange);
+  width: 48px; height: 2px;
+  background: #FF3038;
 }
+
+/* Bottom-right subtle line */
 .ff-panel::after {
   content: '';
   position: absolute;
   bottom: 0; right: 0;
-  width: 60px; height: 2px;
-  background: linear-gradient(270deg, var(--color-speed-blue), transparent);
-  box-shadow: 0 0 10px var(--color-speed-blue);
+  width: 48px; height: 1px;
+  background: rgba(255,255,255,0.08);
 }
 
-/* ============================================
-   BUTTON COMPONENT
-   ============================================ */
+/* ================================================================
+   BUTTONS — primary (red), secondary (ghost), danger
+   ================================================================ */
 .ff-btn {
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  letter-spacing: 0.15em;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 14px 40px;
-  border: 2px solid var(--color-nos-orange);
-  color: var(--color-nos-orange);
-  background: transparent;
+  padding: 14px 36px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 15px rgba(255,106,0,0.3), inset 0 0 15px rgba(255,106,0,0.05);
+  transition: all 0.18s ease;
+  border: 1px solid #FF3038;
+  background: rgba(255,48,56,0.12);
+  color: #FF3038;
 }
+
+/* Shimmer sweep on hover */
 .ff-btn::before {
   content: '';
   position: absolute;
   top: 0; left: -100%;
   width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,106,0,0.15), transparent);
-  transition: left 0.4s ease;
+  background: linear-gradient(90deg, transparent, rgba(255,48,56,0.18), transparent);
+  transition: left 0.35s ease;
 }
 .ff-btn:hover {
-  background: rgba(255,106,0,0.12);
-  box-shadow: 0 0 30px rgba(255,106,0,0.5), inset 0 0 20px rgba(255,106,0,0.1);
-  transform: scale(1.03);
+  background: rgba(255,48,56,0.22);
+  border-color: #FF3038;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(255,48,56,0.25);
+  transform: translateY(-1px);
 }
 .ff-btn:hover::before { left: 100%; }
-.ff-btn:active { transform: scale(0.97); }
+.ff-btn:active { transform: translateY(0) scale(0.98); }
 
-.ff-btn-danger {
-  border-color: var(--color-danger-red);
-  color: var(--color-danger-red);
-  box-shadow: 0 0 15px rgba(255,32,32,0.3), inset 0 0 15px rgba(255,32,32,0.05);
+.ff-btn-orange {
+  border-color: #FF6B2C;
+  background: rgba(255,107,44,0.12);
+  color: #FF6B2C;
 }
-.ff-btn-danger:hover {
-  background: rgba(255,32,32,0.12);
-  box-shadow: 0 0 30px rgba(255,32,32,0.5), inset 0 0 20px rgba(255,32,32,0.1);
+.ff-btn-orange:hover {
+  background: rgba(255,107,44,0.22);
+  border-color: #FF6B2C;
+  box-shadow: 0 0 24px rgba(255,107,44,0.25);
 }
 
-/* ============================================
-   HEADER — HUD BAR
-   ============================================ */
+.ff-btn-ghost {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  color: #9298A5;
+}
+.ff-btn-ghost:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+  color: #F5F5F5;
+  box-shadow: none;
+}
+
+/* Alias kept for legacy */
+.ff-btn-danger { }
+
+/* ================================================================
+   HUD HEADER
+   ================================================================ */
 .hud-header {
-  background: linear-gradient(180deg, rgba(10,10,14,0.98) 0%, rgba(7,7,10,0.95) 100%);
-  border-bottom: 1px solid rgba(255,106,0,0.3);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.8), 0 1px 0 rgba(255,106,0,0.2);
+  background: rgba(8,9,13,0.97);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   position: relative;
 }
+/* Red accent line at bottom */
 .hud-header::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-nos-orange), var(--color-speed-blue), transparent);
+  background: linear-gradient(90deg, #FF3038 0%, rgba(255,107,44,0.5) 40%, transparent 70%);
 }
 
-/* ============================================
-   TACHOMETER / RPM GAUGE (replaces timer)
-   ============================================ */
-.tachometer {
-  position: relative;
-  width: 90px; height: 90px;
-}
-.tach-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid rgba(255,106,0,0.2);
-}
-.tach-arc {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 3px solid transparent;
-}
-
-/* ============================================
-   GEAR SHIFT PROGRESS
-   ============================================ */
-.gear-progress {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+/* ================================================================
+   GEAR PROGRESS BAR
+   ================================================================ */
 .gear-pip {
-  width: 28px; height: 8px;
-  background: rgba(255,106,0,0.15);
-  border: 1px solid rgba(255,106,0,0.3);
+  width: 32px; height: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
   clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
 }
 .gear-pip.active {
-  background: var(--color-nos-orange);
-  box-shadow: 0 0 12px var(--color-nos-orange);
-  border-color: var(--color-nos-orange);
+  background: #FF6B2C;
+  border-color: #FF6B2C;
+  box-shadow: 0 0 8px rgba(255,107,44,0.5);
 }
 .gear-pip.redline {
-  background: var(--color-danger-red);
-  box-shadow: 0 0 12px var(--color-danger-red);
-  border-color: var(--color-danger-red);
-  animation: redlinePulse 0.5s ease infinite alternate;
+  background: #FF3038;
+  border-color: #FF3038;
+  box-shadow: 0 0 10px rgba(255,48,56,0.6);
+  animation: redlineBlink 0.4s ease infinite alternate;
 }
-@keyframes redlinePulse {
-  from { opacity: 0.7; }
-  to   { opacity: 1; box-shadow: 0 0 20px var(--color-danger-red); }
+@keyframes redlineBlink {
+  from { opacity: 0.75; }
+  to   { opacity: 1; }
 }
 
-/* ============================================
-   HIGHWAY CAR TRANSITION ANIMATION
-   ============================================ */
+/* ================================================================
+   HIGHWAY TRANSITION OVERLAY
+   ================================================================ */
 .highway-transition {
   position: fixed;
   inset: 0;
@@ -360,216 +338,136 @@
   overflow: hidden;
 }
 
-/* Road stripe during transition */
-.highway-transition::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 0; right: 0;
-  height: 3px;
-  transform: translateY(-50%);
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 40px,
-    rgba(255,170,0,0.4) 40px, rgba(255,170,0,0.4) 80px
-  );
-  animation: stripeScroll 0.2s linear infinite;
-}
-@keyframes stripeScroll {
-  from { background-position: 0 0; }
-  to   { background-position: -80px 0; }
-}
-
-.car-silhouette {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0;
-  line-height: 0;
-}
-
-/* Speed blur overlay */
-.speed-blur-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-    rgba(255,106,0,0.0) 0%,
-    rgba(0,212,255,0.15) 45%,
-    rgba(255,255,255,0.9) 50%,
-    rgba(0,212,255,0.15) 55%,
-    rgba(255,106,0,0.0) 100%
-  );
-}
-
-/* Headlight flash */
-.headlight-bloom {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(255,240,200,1) 0%, rgba(255,200,100,0.6) 20%, rgba(255,150,0,0.2) 50%, transparent 70%);
-}
-
-/* ============================================
-   NOS BOOST — HINT BUTTON
-   ============================================ */
-.nos-btn {
-  position: relative;
-  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,68,255,0.1));
-  border: 1px solid var(--color-speed-blue);
-  color: var(--color-speed-blue);
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  padding: 8px 20px;
-  cursor: pointer;
-  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-  transition: all 0.2s;
-  box-shadow: 0 0 10px rgba(0,212,255,0.2);
-}
-.nos-btn:hover {
-  background: rgba(0,212,255,0.25);
-  box-shadow: 0 0 25px rgba(0,212,255,0.5);
-}
-.nos-canister {
-  display: inline-block;
-  width: 8px; height: 20px;
-  background: linear-gradient(180deg, var(--color-speed-blue), #0044ff);
-  border-radius: 2px;
-  box-shadow: 0 0 6px var(--color-speed-blue);
-}
-
-/* ============================================
-   ANSWER / OPTION CARDS
-   ============================================ */
+/* ================================================================
+   OPTION CARDS — answer buttons
+   ================================================================ */
 .option-card {
-  background: rgba(17,17,20,0.9);
-  border: 1px solid rgba(255,106,0,0.2);
-  padding: 20px;
+  background: rgba(14,17,24,0.95);
+  border: 1px solid rgba(255,255,255,0.10);
+  padding: 18px 20px;
   cursor: pointer;
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #d0d4e0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #9298A5;
+  text-align: left;
+  transition: all 0.15s ease;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   position: relative;
-  transition: all 0.2s ease;
-  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
 }
 .option-card::before {
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--color-nos-orange);
+  width: 2px;
+  background: #FF3038;
   transform: scaleY(0);
-  transition: transform 0.2s ease;
-  box-shadow: 0 0 8px var(--color-nos-orange);
+  transform-origin: bottom;
+  transition: transform 0.15s ease;
 }
 .option-card:hover {
-  background: rgba(255,106,0,0.08);
-  border-color: rgba(255,106,0,0.6);
-  color: #fff;
-  transform: translateX(4px);
+  background: rgba(255,48,56,0.06);
+  border-color: rgba(255,48,56,0.35);
+  color: #F5F5F5;
 }
 .option-card:hover::before { transform: scaleY(1); }
 
 .option-card.correct {
-  background: rgba(57,255,20,0.12);
-  border-color: var(--color-acid-green);
-  color: var(--color-acid-green);
-  box-shadow: 0 0 20px rgba(57,255,20,0.2);
+  background: rgba(34,197,94,0.08);
+  border-color: rgba(34,197,94,0.5);
+  color: #22C55E;
+}
+.option-card.correct::before {
+  background: #22C55E;
+  transform: scaleY(1);
 }
 .option-card.wrong {
-  background: rgba(255,32,32,0.1);
-  border-color: var(--color-danger-red);
-  color: var(--color-danger-red);
+  background: rgba(255,48,56,0.06);
+  border-color: rgba(255,48,56,0.3);
+  color: rgba(255,48,56,0.5);
   text-decoration: line-through;
 }
-.option-card.dimmed { opacity: 0.4; pointer-events: none; }
+.option-card.dimmed { opacity: 0.35; pointer-events: none; }
 
-/* ============================================
-   STEP INDICATORS — GEAR KNOB STYLE
-   ============================================ */
+/* ================================================================
+   STEP INDICATORS
+   ================================================================ */
 .step-indicator {
-  width: 36px; height: 36px;
-  border: 2px solid #556;
+  width: 34px; height: 34px;
+  border: 1px solid rgba(255,255,255,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  position: relative;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5A6070;
   transform: rotate(45deg);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  position: relative;
 }
-.step-indicator span { transform: rotate(-45deg); }
+.step-indicator > span { transform: rotate(-45deg); }
 .step-indicator.done {
-  border-color: var(--color-acid-green);
-  background: rgba(57,255,20,0.12);
-  color: var(--color-acid-green);
-  box-shadow: 0 0 15px rgba(57,255,20,0.3);
+  border-color: rgba(34,197,94,0.5);
+  color: #22C55E;
+  background: rgba(34,197,94,0.08);
 }
 .step-indicator.active {
-  border-color: var(--color-nos-orange);
-  color: var(--color-nos-orange);
-  box-shadow: 0 0 20px rgba(255,106,0,0.5);
-  animation: stepPulse 1.5s ease infinite;
+  border-color: #FF3038;
+  color: #FF3038;
+  background: rgba(255,48,56,0.08);
+  box-shadow: 0 0 16px rgba(255,48,56,0.2);
 }
-@keyframes stepPulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(255,106,0,0.4); }
-  50% { box-shadow: 0 0 30px rgba(255,106,0,0.8); }
-}
-.step-indicator.pending { color: #556; }
 
-/* ============================================
+/* ================================================================
    TOAST NOTIFICATIONS
-   ============================================ */
+   ================================================================ */
 .toast-success {
-  background: rgba(10,20,12,0.97);
-  border-left: 4px solid var(--color-acid-green);
-  color: var(--color-acid-green);
-  box-shadow: 0 0 30px rgba(57,255,20,0.2), 0 10px 40px rgba(0,0,0,0.8);
-  font-family: var(--font-hud);
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
+  background: rgba(8,9,13,0.98);
+  border-left: 3px solid #22C55E;
+  color: #22C55E;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 .toast-error {
-  background: rgba(20,8,8,0.97);
-  border-left: 4px solid var(--color-danger-red);
-  color: var(--color-danger-red);
-  box-shadow: 0 0 30px rgba(255,32,32,0.2), 0 10px 40px rgba(0,0,0,0.8);
-  font-family: var(--font-hud);
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
+  background: rgba(8,9,13,0.98);
+  border-left: 3px solid #FF3038;
+  color: #FF3038;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 
-/* ============================================
-   BOOT SCREEN — TERMINAL
-   ============================================ */
+/* ================================================================
+   BOOT SCREEN TERMINAL
+   ================================================================ */
 .terminal-text {
-  font-family: var(--font-hud);
-  color: var(--color-nos-orange);
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-  line-height: 2;
-  text-shadow: 0 0 15px rgba(255,106,0,0.6);
+  font-family: 'Orbitron', monospace;
+  color: #FF6B2C;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 2.2;
+  opacity: 0.9;
 }
 
-/* ============================================
+/* ================================================================
    CAMERA VIEWFINDER
-   ============================================ */
+   ================================================================ */
 .cam-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.10'/%3E%3C/svg%3E");
 }
-
-/* Scanline effect on camera */
 .cam-scanlines::before {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    transparent 0px,
-    transparent 3px,
-    rgba(0,0,0,0.15) 3px,
-    rgba(0,0,0,0.15) 4px
+    transparent 0px, transparent 3px,
+    rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px
   );
   pointer-events: none;
   z-index: 5;
@@ -580,39 +478,38 @@
 .cam-bracket::after {
   content: '';
   position: absolute;
-  width: 24px; height: 24px;
-  border-color: var(--color-nos-orange);
+  width: 20px; height: 20px;
+  border-color: rgba(255,107,44,0.7);
   border-style: solid;
-  opacity: 0.8;
 }
-.cam-bracket::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-.cam-bracket::after  { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+.cam-bracket::before { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+.cam-bracket::after  { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
 
 /* REC indicator */
 .rec-indicator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-family: var(--font-hud);
-  font-size: 0.7rem;
-  color: var(--color-danger-red);
+  gap: 5px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #FF3038;
   letter-spacing: 0.15em;
 }
 .rec-dot {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--color-danger-red);
-  box-shadow: 0 0 8px var(--color-danger-red);
+  background: #FF3038;
   animation: recBlink 1s ease infinite;
 }
 @keyframes recBlink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50%       { opacity: 0.2; }
 }
 
-/* ============================================
-   RANGE SLIDERS — NOS GAUGE STYLE
-   ============================================ */
+/* ================================================================
+   RANGE SLIDERS
+   ================================================================ */
 input[type=range] {
   -webkit-appearance: none;
   width: 100%;
@@ -620,71 +517,79 @@ input[type=range] {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 5px;
-  background: linear-gradient(90deg, rgba(255,106,0,0.15), rgba(255,106,0,0.3));
-  border-radius: 0;
-  border: 1px solid rgba(255,106,0,0.3);
+  height: 3px;
+  background: rgba(255,255,255,0.12);
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 28px;
-  width: 14px;
-  background: var(--color-nos-orange);
-  margin-top: -12px;
+  height: 20px;
+  width: 10px;
+  background: #FF6B2C;
+  margin-top: -9px;
   cursor: pointer;
   clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
-  box-shadow: 0 0 15px var(--color-nos-orange), 0 0 5px rgba(255,106,0,0.8);
-  transition: box-shadow 0.2s;
+  transition: background 0.15s;
 }
-input[type=range]:hover::-webkit-slider-thumb {
-  box-shadow: 0 0 25px var(--color-nos-orange), 0 0 10px rgba(255,106,0,0.9);
-}
+input[type=range]:hover::-webkit-slider-thumb { background: #FF3038; }
 
-/* ============================================
-   CHECKBOX — TOGGLE SWITCH
-   ============================================ */
+/* ================================================================
+   CHECKBOX
+   ================================================================ */
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
-  width: 26px; height: 26px;
-  border: 2px solid var(--color-speed-blue);
-  background: rgba(0,212,255,0.06);
+  width: 22px; height: 22px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.04);
   position: relative;
   cursor: pointer;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
-  transition: all 0.2s;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  transition: all 0.15s;
 }
 input[type="checkbox"]:checked {
-  background: var(--color-speed-blue);
-  box-shadow: 0 0 15px var(--color-speed-blue);
+  background: rgba(0,200,255,0.15);
+  border-color: #00C8FF;
 }
 input[type="checkbox"]:checked::after {
   content: '✓';
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  color: #000;
-  font-family: var(--font-heading);
-  font-weight: 900;
-  font-size: 16px;
+  color: #00C8FF;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
 }
 
-/* ============================================
-   CONFIDENCE GAUGE
-   ============================================ */
-.conf-gauge-wrap {
+/* ================================================================
+   SYSTEM ASSIST — hint panel
+   ================================================================ */
+.sys-assist {
+  background: rgba(0,200,255,0.04);
+  border-left: 2px solid rgba(0,200,255,0.4);
+  padding: 8px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(0,200,255,0.8);
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+/* ================================================================
+   RADAR BAR
+   ================================================================ */
+.radar-bar {
+  background: rgba(8,9,13,0.95);
+  border: 1px solid rgba(255,255,255,0.08);
   position: relative;
-  width: 160px; height: 85px;
   overflow: hidden;
-  margin: 0 auto;
 }
 
-/* ============================================
-   TICKET / CHALLAN PAPER
-   ============================================ */
+/* ================================================================
+   CHALLAN TICKET
+   ================================================================ */
 .challan-paper {
-  background: #f5f0e8;
+  background: #F5F0E8;
   color: #111;
   font-family: 'Courier New', monospace;
   position: relative;
@@ -695,103 +600,89 @@ input[type="checkbox"]:checked::after {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent 23px,
-    rgba(0,0,0,0.06) 23px,
-    rgba(0,0,0,0.06) 24px
+    0deg, transparent 0, transparent 23px,
+    rgba(0,0,0,0.05) 23px, rgba(0,0,0,0.05) 24px
   );
 }
 .challan-stamp {
   position: absolute;
-  top: 40%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-20deg);
-  border: 4px solid;
-  padding: 6px 16px;
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  border-radius: 4px;
+  top: 38%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  border: 3px solid;
+  padding: 5px 14px;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  font-weight: 900;
+  border-radius: 3px;
 }
 
-/* ============================================
-   OUTRO SCREEN — FINISH LINE
-   ============================================ */
-.finish-line-bg {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #000 0px, #000 30px,
-      #fff 30px, #fff 60px
-    );
-  height: 20px;
-  width: 100%;
-}
-.rank-badge {
-  background: linear-gradient(135deg, rgba(255,106,0,0.2), rgba(255,170,0,0.1));
-  border: 2px solid var(--color-nos-orange);
-  box-shadow: 0 0 30px rgba(255,106,0,0.3), inset 0 0 20px rgba(255,106,0,0.05);
+/* ================================================================
+   FINISH LINE / OUTRO
+   ================================================================ */
+.finish-line-bar {
+  height: 18px;
+  background: repeating-linear-gradient(
+    90deg, #000 0, #000 24px, #fff 24px, #fff 48px
+  );
+  opacity: 0.85;
 }
 
-/* ============================================
-   SYSTEM ASSIST HINT BOX
-   ============================================ */
-.sys-assist {
-  background: rgba(0,212,255,0.05);
-  border-left: 3px solid var(--color-speed-blue);
-  border-bottom: 1px solid rgba(0,212,255,0.15);
-  padding: 10px 14px;
-  font-family: var(--font-hud);
-  font-size: 0.72rem;
-  color: var(--color-speed-blue);
-  letter-spacing: 0.05em;
-  position: relative;
-}
-.sys-assist::before {
-  content: '▶ SYS';
-  margin-right: 8px;
-  opacity: 0.6;
-}
-
-/* ============================================
-   RADAR / SPEED TRACKER BAR
-   ============================================ */
-.radar-bar {
-  background: rgba(5,5,8,0.9);
-  border: 1px solid rgba(255,106,0,0.2);
+.rank-card {
+  background: #0E1118;
+  border: 1px solid rgba(255,255,255,0.10);
   position: relative;
   overflow: hidden;
 }
-.radar-bar::before {
+.rank-card::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 29px,
-    rgba(255,106,0,0.04) 29px, rgba(255,106,0,0.04) 30px
-  );
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FF3038, #FF6B2C, transparent);
 }
 
-/* ============================================
-   DRAG RACE COUNTDOWN
-   ============================================ */
+/* ================================================================
+   DRAG RACE LIGHTS
+   ================================================================ */
 .drag-light {
-  width: 16px; height: 16px;
+  width: 14px; height: 14px;
   border-radius: 50%;
-  background: #222;
-  border: 2px solid #444;
-  transition: all 0.1s;
+  background: #1A1E28;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.08s;
 }
-.drag-light.yellow { background: #ffaa00; box-shadow: 0 0 12px #ffaa00, 0 0 24px rgba(255,170,0,0.5); }
-.drag-light.green  { background: var(--color-acid-green); box-shadow: 0 0 12px var(--color-acid-green), 0 0 24px rgba(57,255,20,0.5); }
-.drag-light.red    { background: var(--color-danger-red); box-shadow: 0 0 12px var(--color-danger-red), 0 0 24px rgba(255,32,32,0.5); }
+.drag-light.yellow {
+  background: #F59E0B;
+  box-shadow: 0 0 10px rgba(245,158,11,0.6);
+  border-color: #F59E0B;
+}
+.drag-light.green {
+  background: #22C55E;
+  box-shadow: 0 0 10px rgba(34,197,94,0.6);
+  border-color: #22C55E;
+}
+.drag-light.red {
+  background: #FF3038;
+  box-shadow: 0 0 10px rgba(255,48,56,0.6);
+  border-color: #FF3038;
+}
 
-/* ============================================
+/* ================================================================
    SCROLLBAR
-   ============================================ */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: rgba(255,106,0,0.05); }
-::-webkit-scrollbar-thumb {
-  background: var(--color-nos-orange);
-  box-shadow: 0 0 6px var(--color-nos-orange);
+   ================================================================ */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+::-webkit-scrollbar-thumb { background: rgba(255,48,56,0.4); }
+
+/* ================================================================
+   UTILITY ANIMATIONS
+   ================================================================ */
+@keyframes redlinePulse {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 1; }
+}
+
+@keyframes roadScroll {
+  from { background-position: 0 0; }
+  to   { background-position: 80px 0; }
 }
